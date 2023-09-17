@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  postgres:
+    build:
+      context: ./db
+      dockerfile: Dockerfile
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  projo-api:
+    build:
+      context: ./projo-api
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+volumes:
+  postgres_data:
