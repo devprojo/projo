@@ -64,6 +64,7 @@ public class BoardService {
             return boardRepository.save(newBoard);
         } else {
             board.setTitle(newBoard.getTitle());
+            taskRepository.deleteAll(board.getTasks());
             board.getTasks().clear();
             taskRepository.saveAll(newBoard.getTasks());
             board.getTasks().addAll(newBoard.getTasks());
