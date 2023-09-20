@@ -44,7 +44,6 @@ public class BoardService {
      * @return created Board object, this object will have a new ID
      */
     public Board createBoard(Board board) {
-        taskRepository.saveAll(board.getTasks());
         return boardRepository.save(board);
     }
 
@@ -60,14 +59,10 @@ public class BoardService {
         Board board = boardRepository.findById(id).orElse(null);
         if (board == null) {
             newBoard.setId(id);
-            taskRepository.saveAll(newBoard.getTasks());
             return boardRepository.save(newBoard);
         } else {
             board.setTitle(newBoard.getTitle());
-            taskRepository.deleteAll(board.getTasks());
-            board.getTasks().clear();
-            taskRepository.saveAll(newBoard.getTasks());
-            board.getTasks().addAll(newBoard.getTasks());
+            board.setTasks(newBoard.getTasks());
             return boardRepository.save(board);
         }
     }
