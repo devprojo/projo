@@ -43,9 +43,7 @@ public class Board extends BaseEntity {
     }
 
     public void setTasks(Set<Task> tasks) {
-        this.tasks.clear();
-        this.tasks.addAll(tasks);
-        tasks.forEach(task -> task.setBoard(this));
+        this.tasks = tasks;
     }
 
     public void addTask(Task task) {

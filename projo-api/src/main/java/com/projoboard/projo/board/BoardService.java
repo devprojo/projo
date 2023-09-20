@@ -51,20 +51,13 @@ public class BoardService {
      * Update Board entry in the repository, if the entry with the specified ID doesn't exist
      * a new entry will be created
      *
-     * @param id       ID of a Board to update
-     * @param newBoard Board object with different fields
+     * @param id    ID of a Board to update
+     * @param board Board object with different fields
      * @return updated Board object
      */
-    public Board updateBoard(Long id, Board newBoard) {
-        Board board = boardRepository.findById(id).orElse(null);
-        if (board == null) {
-            newBoard.setId(id);
-            return boardRepository.save(newBoard);
-        } else {
-            board.setTitle(newBoard.getTitle());
-            board.setTasks(newBoard.getTasks());
-            return boardRepository.save(board);
-        }
+    public Board updateBoard(Long id, Board board) {
+        board.setId(id);
+        return boardRepository.save(board);
     }
 
     /**
