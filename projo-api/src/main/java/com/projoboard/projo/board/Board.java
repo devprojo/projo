@@ -1,14 +1,14 @@
 package com.projoboard.projo.board;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.projoboard.projo.models.BaseEntity;
 import com.projoboard.projo.task.Task;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -18,10 +18,9 @@ public class Board extends BaseEntity {
 
     private String title;
 
-    @OneToMany
-    @JoinColumn(name = "board_id")
-    @Cascade(CascadeType.DELETE_ORPHAN)
-    private Set<Task> tasks;
+    @OneToMany(mappedBy = "board", orphanRemoval = true, cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private Set<Task> tasks = new HashSet<>();
 
     public Board(String title, Set<Task> tasks) {
         this.title = title;
@@ -45,6 +44,16 @@ public class Board extends BaseEntity {
 
     public void setTasks(Set<Task> tasks) {
         this.tasks = tasks;
+    }
+
+    public void addTask(Task task) {
+        this.tasks.add(task);
+        task.setBoard(this);
+    }
+
+    public void removeTask(Task task) {
+        this.tasks.remove(task);
+        task.setBoard(null);
     }
 
     @Override

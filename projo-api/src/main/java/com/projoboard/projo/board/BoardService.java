@@ -44,7 +44,6 @@ public class BoardService {
      * @return created Board object, this object will have a new ID
      */
     public Board createBoard(Board board) {
-        taskRepository.saveAll(board.getTasks());
         return boardRepository.save(board);
     }
 
@@ -52,24 +51,13 @@ public class BoardService {
      * Update Board entry in the repository, if the entry with the specified ID doesn't exist
      * a new entry will be created
      *
-     * @param id       ID of a Board to update
-     * @param newBoard Board object with different fields
+     * @param id    ID of a Board to update
+     * @param board Board object with different fields
      * @return updated Board object
      */
-    public Board updateBoard(Long id, Board newBoard) {
-        Board board = boardRepository.findById(id).orElse(null);
-        if (board == null) {
-            newBoard.setId(id);
-            taskRepository.saveAll(newBoard.getTasks());
-            return boardRepository.save(newBoard);
-        } else {
-            board.setTitle(newBoard.getTitle());
-            taskRepository.deleteAll(board.getTasks());
-            board.getTasks().clear();
-            taskRepository.saveAll(newBoard.getTasks());
-            board.getTasks().addAll(newBoard.getTasks());
-            return boardRepository.save(board);
-        }
+    public Board updateBoard(Long id, Board board) {
+        board.setId(id);
+        return boardRepository.save(board);
     }
 
     /**

@@ -1,7 +1,11 @@
 package com.projoboard.projo.task;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.projoboard.projo.board.Board;
 import com.projoboard.projo.models.BaseEntity;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 import java.util.Objects;
@@ -12,6 +16,10 @@ public class Task extends BaseEntity {
 
     private String title;
     private String description;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonBackReference
+    private Board board;
 
     public Task() {
     }
@@ -35,6 +43,14 @@ public class Task extends BaseEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Board getBoard() {
+        return board;
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
     }
 
     @Override
