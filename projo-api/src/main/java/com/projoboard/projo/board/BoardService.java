@@ -1,6 +1,5 @@
 package com.projoboard.projo.board;
 
-import com.projoboard.projo.task.TaskRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,11 +10,9 @@ import java.util.List;
 @Service
 public class BoardService {
     private final BoardRepository boardRepository;
-    private final TaskRepository taskRepository;
 
-    public BoardService(BoardRepository boardRepository, TaskRepository taskRepository) {
+    public BoardService(BoardRepository boardRepository) {
         this.boardRepository = boardRepository;
-        this.taskRepository = taskRepository;
     }
 
     /**
@@ -51,13 +48,17 @@ public class BoardService {
      * Update Board entry in the repository, if the entry with the specified ID doesn't exist
      * a new entry will be created
      *
-     * @param id    ID of a Board to update
-     * @param board Board object with different fields
+     * @param id           ID of a Board to update
+     * @param updatedBoard Board object with different fields
      * @return updated Board object
      */
-    public Board updateBoard(Long id, Board board) {
-        board.setId(id);
-        return boardRepository.save(board);
+    public Board updateBoard(Long id, Board updatedBoard) {
+        Board board = boardRepository.findById(id).orElse(null);
+        updatedBoard.setId(id);
+        if (board != null) {
+            updatedBoard.setProject(board.getProject());
+        }
+        return boardRepository.save(updatedBoard);
     }
 
     /**

@@ -30,8 +30,15 @@ public class TaskService {
         taskRepository.deleteById(id);
     }
 
-    public Task updateTask(Task task, Long id) {
-        task.setId(id);
-        return taskRepository.save(task);
+    public Task updateTask(Long id, Task updatedTask) {
+        Task task = taskRepository.findById(id).orElse(null);
+        if (task == null) {
+            updatedTask.setId(id);
+            return taskRepository.save(updatedTask);
+        } else {
+            task.setTitle(updatedTask.getTitle());
+            task.setDescription(updatedTask.getDescription());
+            return taskRepository.save(task);
+        }
     }
 }
