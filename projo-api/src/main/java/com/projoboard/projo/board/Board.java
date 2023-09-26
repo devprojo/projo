@@ -1,12 +1,11 @@
 package com.projoboard.projo.board;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.projoboard.projo.models.BaseEntity;
+import com.projoboard.projo.project.Project;
 import com.projoboard.projo.task.Task;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -21,6 +20,10 @@ public class Board extends BaseEntity {
     @OneToMany(mappedBy = "board", orphanRemoval = true, cascade = CascadeType.ALL)
     @JsonManagedReference
     private Set<Task> tasks = new HashSet<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonBackReference
+    private Project project;
 
     public Board(String title, Set<Task> tasks) {
         this.title = title;
@@ -54,6 +57,14 @@ public class Board extends BaseEntity {
     public void removeTask(Task task) {
         this.tasks.remove(task);
         task.setBoard(null);
+    }
+
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
     }
 
     @Override
